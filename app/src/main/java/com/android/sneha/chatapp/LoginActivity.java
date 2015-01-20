@@ -4,12 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.facebook.AppEventsLogger;
+import com.google.android.gms.common.ConnectionResult;
+
+import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
 
 
 public class LoginActivity extends FragmentActivity {
 
+
+    static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
 
     private MainFragment mainFragment;
     @Override
@@ -28,6 +34,8 @@ public class LoginActivity extends FragmentActivity {
             mainFragment = (MainFragment) getSupportFragmentManager()
                     .findFragmentById(android.R.id.content);
         }
+
+
     }
 
 
@@ -37,6 +45,10 @@ public class LoginActivity extends FragmentActivity {
 
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
+        if(isGooglePlayServicesAvailable(LoginActivity.this) == ConnectionResult.SUCCESS){
+
+            Toast.makeText(this,"Google play services is Avialable",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
