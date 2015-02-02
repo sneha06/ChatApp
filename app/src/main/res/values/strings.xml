@@ -6,5 +6,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="app_id">1537139539874763</string>
+    <string name="app_id">444656582354852</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="error_msg">error</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_friends">FriendsActivity</string>
+
 </resources>

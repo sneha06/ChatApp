@@ -4,9 +4,59 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.android.sneha.chatapp.SignUpActivity">
+    tools:context="com.android.sneha.chatapp.SignUpActivity"
+    android:id="@+id/r1">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Enter your name"
+        android:inputType="textPersonName"
+        android:layout_marginTop="100dp"
+        android:id="@+id/pname" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+
+        android:id="@+id/email_login"
+        android:layout_below="@+id/pname"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:hint="Enter your Email"/>
+    <EditText
+        android:id="@+id/pwd_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_login"
+        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
+        android:hint="Enter your password"/>
+    <EditText
+        android:id="@+id/cpwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pwd_login"
+        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
+        android:hint="Confirm your password"/>
+    <Button
+        android:id="@+id/sgnbttn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cpwd"
+        android:text="SignUp"
+        android:layout_marginTop="10dp"/>
+    <Button
+        android:id="@+id/login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LogIn"
+        android:layout_marginRight="36dp"
+        android:layout_alignTop="@+id/sgnbttn"
+        android:layout_alignRight="@+id/cpwd"
+        android:layout_alignEnd="@+id/cpwd"
+        android:layout_marginEnd="36dp" />
 </RelativeLayout>
