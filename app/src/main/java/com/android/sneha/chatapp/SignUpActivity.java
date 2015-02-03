@@ -75,7 +75,7 @@ public class SignUpActivity extends ActionBarActivity {
                                 //success!
                                // ParseApplication.updatePasreInstallation(ParseUser.getCurrentUser());
 
-                                Intent intent = new Intent(SignUpActivity.this, ChatActivity.class);
+                                Intent intent = new Intent(SignUpActivity.this, FriendsActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
