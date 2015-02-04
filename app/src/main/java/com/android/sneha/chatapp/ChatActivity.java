@@ -10,8 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -22,9 +24,11 @@ public class ChatActivity extends ActionBarActivity {
     public static final String KEY_RECIPIENT_IDS = "recipientIds";
     public static final String KEY_SENDER_IDS = "senderId";
     public static final String KEY_SENDER_NAME = "senderName";
+    public static final String KEY_MESSAGE = "message";
 
     Button sendButton;
     EditText sendtext;
+    String sendMessage;
 
     String recipientId;
     @Override
@@ -34,8 +38,7 @@ public class ChatActivity extends ActionBarActivity {
 
         recipientId = getIntent().getStringExtra("ruid");
 
-        String UserChatDB = ParseUser.getCurrentUser().getUsername() + " - "  ;
-        ;
+           sendMessage =sendtext.getText().toString();
 
         sendtext = (EditText) findViewById(R.id.sendText);
         sendButton = (Button) findViewById(R.id.sendbutton);
@@ -59,8 +62,29 @@ public class ChatActivity extends ActionBarActivity {
                 }
             }
         });
+
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASS_MESSAGES);
+        query.getInBackground(KEY_MESSAGE,new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+
+                if(e == null){
+
+
+
+                }else{
+                    Toast.makeText(ChatActivity.this,"Somthing went wrong",Toast.LENGTH_LONG);
+                }
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,13 +128,14 @@ public class ChatActivity extends ActionBarActivity {
             }
         });
     }
+    //sendtext.getText().toString()
 
     protected ParseObject createMessage(){
-        ParseObject message = new ParseObject(sendtext.getText().toString());
+        ParseObject message = new ParseObject(CLASS_MESSAGES);
         message.put(KEY_SENDER_IDS, ParseUser.getCurrentUser().getObjectId());
         message.put(KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
         message.put(KEY_RECIPIENT_IDS,recipientId);
-
+        message.put(KEY_MESSAGE,sendMessage);
         return message;
     }
 
