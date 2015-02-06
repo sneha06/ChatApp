@@ -6,30 +6,38 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.List;
+
 
 public class ChatActivity extends ActionBarActivity {
 
     public  static final String CLASS_MESSAGES = "Message";
-    public static final String KEY_RECIPIENT_IDS = "recipientIds";
+    public static final String KEY_RECIPIENT_IDS = "recipientId";
     public static final String KEY_SENDER_IDS = "senderId";
     public static final String KEY_SENDER_NAME = "senderName";
     public static final String KEY_MESSAGE = "message";
+    public static final String KEY_CREATED_AT = "CreatedAt";
+    protected List<ParseObject> mMessages;
 
     Button sendButton;
     EditText sendtext;
     String sendMessage;
+    ListView userList;
 
+    int i = 0;
     String recipientId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +46,14 @@ public class ChatActivity extends ActionBarActivity {
 
         recipientId = getIntent().getStringExtra("ruid");
 
-           sendMessage =sendtext.getText().toString();
+
+        userList = (ListView) findViewById(R.id.list);
 
         sendtext = (EditText) findViewById(R.id.sendText);
+
         sendButton = (Button) findViewById(R.id.sendbutton);
+
+        sendMessage = sendtext.getText().toString();
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +70,7 @@ public class ChatActivity extends ActionBarActivity {
                 }else{
                     //send
                     send(message);
-                    finish();
+
                 }
             }
         });
@@ -70,20 +82,65 @@ public class ChatActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASS_MESSAGES);
-        query.getInBackground(KEY_MESSAGE,new GetCallback<ParseObject>() {
+       ParseQuery<ParseObject> query =  ParseQuery.getQuery("Message");
+        query.whereEqualTo(KEY_RECIPIENT_IDS,ParseUser.getCurrentUser().getObjectId());
+         query.addDescendingOrder(KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(ParseObject parseObject, ParseException e) {
+            public void done(List<ParseObject> messages, ParseException e) {
 
-                if(e == null){
+                if (e==null){
+                     //messages found
+                    mMessages = messages;
+
+                    String[] username = new String[mMessages.size()];
 
 
+                    for(ParseObject message :mMessages){
+                        username[i] = message.getString(String.valueOf(message));
+                           Toast.makeText(ChatActivity.this,username[i],Toast.LENGTH_LONG).show();
+                        i++;
+                    }
 
-                }else{
-                    Toast.makeText(ChatActivity.this,"Somthing went wrong",Toast.LENGTH_LONG);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChatActivity.this,
+                            android.R.layout.simple_list_item_1,username);
+                    //userList.setListAdapter(adapter);
+                    userList.setAdapter(adapter);
                 }
+
             }
         });
+
+
+       /* ParseQuery<ParseObject> query = ParseQuery.getQuery("Messages");
+        query.whereEqualTo(KEY_RECIPIENT_IDS,ParseUser.getCurrentUser().getObjectId());
+        query.addDescendingOrder(KEY_CREATED_AT);
+        query.getInBackground(ParseUser.getCurrentUser().getObjectId(),new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject messages, ParseException e) {
+
+                if (e==null){
+                    //messages found
+                   // mMessages = messages;
+                    mMessages = (List<ParseObject>) messages;
+                    String[] username = new String[mMessages.size()];
+
+
+                    for(ParseObject message :mMessages){
+                        username[i] = message.getString(KEY_SENDER_NAME);
+                        Toast.makeText(ChatActivity.this,username[i],Toast.LENGTH_LONG).show();
+                        i++;
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ChatActivity.this,
+                            android.R.layout.simple_list_item_1,username);
+                    //userList.setListAdapter(adapter);
+                    userList.setAdapter(adapter);
+                }
+
+            }
+        });*/
+
     }
 
     @Override
@@ -107,6 +164,7 @@ public class ChatActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     protected void send(ParseObject message){
         message.saveInBackground(new SaveCallback() {
@@ -135,7 +193,7 @@ public class ChatActivity extends ActionBarActivity {
         message.put(KEY_SENDER_IDS, ParseUser.getCurrentUser().getObjectId());
         message.put(KEY_SENDER_NAME,ParseUser.getCurrentUser().getUsername());
         message.put(KEY_RECIPIENT_IDS,recipientId);
-        message.put(KEY_MESSAGE,sendMessage);
+        message.put(KEY_MESSAGE,sendtext.getText().toString());
         return message;
     }
 
