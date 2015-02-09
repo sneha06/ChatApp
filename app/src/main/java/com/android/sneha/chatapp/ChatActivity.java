@@ -95,9 +95,11 @@ public class ChatActivity extends ActionBarActivity {
 
                     String[] username = new String[mMessages.size()];
 
+                    
 
                     for(ParseObject message :mMessages){
-                        username[i] = message.getString(String.valueOf(message));
+                        username[i] = message.getString(KEY_MESSAGE);
+
                            Toast.makeText(ChatActivity.this,username[i],Toast.LENGTH_LONG).show();
                         i++;
                     }
